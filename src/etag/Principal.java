@@ -85,6 +85,10 @@ public class Principal extends etag.Controladora {
         Hierholzer = new javax.swing.JMenuItem();
         MatrizAdj = new javax.swing.JMenuItem();
         MatrizIncidente = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jToolBar2.setRollover(true);
 
@@ -336,6 +340,28 @@ public class Principal extends etag.Controladora {
         MenuTrabalhoPratico.add(MatrizIncidente);
 
         MenuToolbar.add(MenuTrabalhoPratico);
+
+        jMenu1.setText("Trabalho Prático II");
+        jMenu1.setToolTipText("");
+
+        jMenuItem1.setText("Importar Dados");
+        jMenuItem1.setActionCommand("ImportarDados");
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Média Geodésica");
+        jMenuItem2.setActionCommand("Geodesica");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GeodesicaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("Maior Componente");
+        jMenuItem3.setActionCommand("MaiorComponente");
+        jMenu1.add(jMenuItem3);
+
+        MenuToolbar.add(jMenu1);
 
         setJMenuBar(MenuToolbar);
 
@@ -629,6 +655,21 @@ public class Principal extends etag.Controladora {
         }
     }//GEN-LAST:event_MatrizIncidenteActionPerformed
 
+    private void GeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GeodesicaActionPerformed
+        // TODO add your handling code here:
+        
+        Grafo GrafoCopia =  this.grafo;        
+       
+        GrafoCopia.atualizaArestas();
+        GrafoCopia.atualizaVertices();
+        
+        ControllerBusca B =  new ControllerBusca("L");
+        
+        B.Busca(GrafoCopia);
+              
+        
+    }//GEN-LAST:event_GeodesicaActionPerformed
+
     /**
      * Método principal para execução da janela gráfica da ferramenta.
      *
@@ -674,6 +715,10 @@ public class Principal extends etag.Controladora {
     private javax.swing.JToolBar ToolBarGrafo;
     private javax.swing.JMenuItem Unicursal;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JScrollPane jScrollPane1;
