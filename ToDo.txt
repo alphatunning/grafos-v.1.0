@@ -1,0 +1,15 @@
+* ler arquivo txt
+
+- subir pro git as alterações da keyla MANUALMENTE. Sem prejudicar o versionamento
+- manipular o txt do facebook 
+
+* algoritmo busca profundidade
+
+* algoritmo busca largura
+
+- testar os algoritmos
+
+- implementar a geodesica pra cads vértice chamando a busca
+
+- implementar a media geodesica (todos os vértices) com um for bolado chamando o item anterior
+- testar a manipulação do facebook no uso da geodesica
