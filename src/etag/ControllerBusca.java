@@ -94,29 +94,27 @@ public class ControllerBusca {
     }
     
     //procedimento Busca-Largura(v: vértice)
-    public void BuscaLargura(Vertice v){
+    public void BuscaLargura(Vertice v){ 
+        
         //Inicializar F
         List<Vertice> Fila = new LinkedList<Vertice>();
         
         //Marcar v com a cor cinza
         v.setCores("Cinza");//TODO: Verificar essa cor também.
+        listaVisitados.add(v);
+        
         //DÚVIDA: Para um vertice ir pra lsita de visitados, basta ficar cinza? ou Preto?
 
         //Colocar v no final de F
-        Fila.add(v); //TODO: Conferir se o add adiciona no final mesmo
+        Fila.add(v); //Quem tá na fila é a galera que tá esperando pra explorar
+        //todos os seus vértices adjacentes.
         
         //Enquanto F não vazio:
-        if (Fila.isEmpty()){
-               
+        while (Fila.isEmpty()){
+            
             //u = primeiro elemento de F
-            Vertice u = new Vertice(Fila.get(0));
-            
-            //Retirar u de F
-            Fila.remove(u); //ou Fila.remove(0);
-            
-            //Marcar u com cor Preta
-            u.setCores("Heriklys");
-            
+            Vertice u = new Vertice(Fila.get(0)); 
+                                   
             //Para cada vértice w adjacente a u:
             for (Vertice w : G.getVerticesAdjacentes(u.getID())){
                 
@@ -125,11 +123,18 @@ public class ControllerBusca {
                     
                     //Marcar w com a cor cinza
                     w.setCores("Cinza");
+                    listaVisitados.add(w);     
                     
                     //Colocar w no final de F
                     Fila.add(w);
                 }
-            }           
+            }    
+            
+            //Retirar u de F
+            Fila.remove(u); //ou Fila.remove(0); 
+   
+            //Marcar u com cor Preta
+            u.setCores("Heriklys");
         }
     }
     

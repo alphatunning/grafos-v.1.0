@@ -658,7 +658,7 @@ public class Principal extends etag.Controladora {
     private void GeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GeodesicaActionPerformed
         // TODO add your handling code here:
         
-        Grafo GrafoCopia =  this.grafo;        
+        Grafo GrafoCopia = this.grafo;        
        
         GrafoCopia.atualizaArestas();
         GrafoCopia.atualizaVertices();
@@ -667,7 +667,6 @@ public class Principal extends etag.Controladora {
         
         B.Busca(GrafoCopia);
               
-        
     }//GEN-LAST:event_GeodesicaActionPerformed
 
     /**
