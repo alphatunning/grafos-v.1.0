@@ -1,15 +1,23 @@
-* ler arquivo txt
+- algoritmo busca profundidade
 
-- subir pro git as alterações da keyla MANUALMENTE. Sem prejudicar o versionamento
-- manipular o txt do facebook 
+- calcular a qtde de arestas/vertices por arvore
 
-* algoritmo busca profundidade
+- criar uma lista de arvores
+
+- verificar nessa lista quem é a maior árvore e enviar pra busca em largura
+
+- ajeitar os menus pra duas partes agora: Maior componente e depois, Médiga Geodésica
 
 * algoritmo busca largura
 
-- testar os algoritmos
+* implementar a geodesica pra cads vértice chamando a busca
 
-- implementar a geodesica pra cads vértice chamando a busca
+* implementar a media geodesica (todos os vértices) com um for bolado chamando o item anterior
 
-- implementar a media geodesica (todos os vértices) com um for bolado chamando o item anterior
+- Arrumar um jeito de copiar o grafo (clone) na hora de montar o maior componente.
+
 - testar a manipulação do facebook no uso da geodesica
+
+- testar alterar/remover/adicionar itens no grafo.
+
+- DÚVIDA: Considerar a volta do par de vértice no somatório das geodésica.

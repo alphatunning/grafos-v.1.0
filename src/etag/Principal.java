@@ -663,14 +663,16 @@ public class Principal extends etag.Controladora {
     private void GeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GeodesicaActionPerformed
         // TODO add your handling code here:
         
-        Grafo MaiorComponente = this.grafo;        
-       
-        MaiorComponente.atualizaArestas();
-        MaiorComponente.atualizaVertices();
+        this.grafo.atualizaArestas();
+        this.grafo.atualizaVertices();
         
+        Grafo MaiorComponente = this.grafo;             
+                
         ControllerBusca B =  new ControllerBusca("L");
         
         B.Busca(MaiorComponente);
+        
+        this.explorados.addAll((B.listaExplorados));
         
         double fracaoGeodesica = 0;
         int nGeodesica = MaiorComponente.getMapaVertices().keySet().size(); // MaiorComponente.getMapaVertices().size();
@@ -684,12 +686,22 @@ public class Principal extends etag.Controladora {
         }
         
         mediaGeodesica = fracaoGeodesica * somatorioGeodesica; 
-                                
+        
+         JPrompt.printPane("Média Geodésica: " + Double.toString(mediaGeodesica));
+                         
+        //jLabelStatus.setText("Média Geodésica: " + Double.toString(mediaGeodesica));
+        
     }//GEN-LAST:event_GeodesicaActionPerformed
 
     private void ImportarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarDadosActionPerformed
          // Importar Dados
-        ModelArquivo.main();
+        //ModelArquivo.main();
+        
+        for (Vertice v : this.grafo.getVerticesAdjacentes("v1")){
+            v.setCores("black,green");
+            this.explorados.add(v);
+        }
+        
     }//GEN-LAST:event_ImportarDadosActionPerformed
 
     /**

@@ -20,11 +20,13 @@ public class ControllerBusca {
     private ArrayList<ParVertice> listaParVertices;
     private Grafo G;
     private String tipoBusca;
+    public ArrayList<Item> listaExplorados;
     
      public ControllerBusca(String tipoBusca) {
         listaVisitados = new ArrayList<Vertice>();
         G = new Grafo();
         this.tipoBusca = tipoBusca;
+        listaExplorados = new ArrayList<Item>();
     }
 
     public ArrayList<ParVertice> getListaParVertices() {
@@ -62,49 +64,53 @@ public class ControllerBusca {
     //procedimento Busca(G: Grafo)
     public void Busca(Grafo G){
  
-            listaVisitados = new ArrayList<Vertice>();
-            listaParVertices = new ArrayList<ParVertice>();
-            this.G = G;
+        listaVisitados = new ArrayList<Vertice>();
+        listaParVertices = new ArrayList<ParVertice>();
+        this.G = G;
 
-            //Para Cada vértice v de G:
-            for (Vertice v : G.getMapaVertices().values() ){
-                //Marque v com cor branca
-                v.setCores("FFF"); //TODO: Verificar como colore nesse etag maluco do Môs.
+        
+            
+        //Para Cada vértice v de G:
+        for (Vertice v : G.getMapaVertices().values() ){
+
+            for (Vertice x : G.getMapaVertices().values() ){
+                Item j = new Item(x.getItem());
+                j.setCores("black,white");
+                this.listaExplorados.add(j);  
             }
             
-            //Para Cada vértice v de G:
-            for (Vertice v : G.getMapaVertices().values() ){
-                                 
-                    //parâmetro para indicar o tipo da busca
-                    if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){
-                        //Se v não foi visitado:
-                        if(!listaVisitados.contains(v)){
-                           BuscaProfundidade(v); 
-                           
-                           //adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
-                        }
-                                                
-                    }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
-                        BuscaLargura(v); 
-                        
-                    }
-                    
-            }
-        
+                //parâmetro para indicar o tipo da busca
+                if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){
+                    //Se v não foi visitado:
+                    //if(!listaVisitados.contains(v)){
+                    //   BuscaProfundidade(v); 
+
+                       //adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
+                    //}
+
+                }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
+                    BuscaLargura(v); 
+
+                }
+
+        }
+
     }
     
     //procedimento Busca-Largura(v: vértice)
     public void BuscaLargura(Vertice v){ 
-        int nivel = 0;
-        listaVisitados = new ArrayList<Vertice>();
-        
         //Inicializar F
         List<Vertice> Fila = new LinkedList<Vertice>();
         String UltimoVerticeNivel;
-        
+        int nivel = 0;
+        listaVisitados = new ArrayList<Vertice>();
+                
         //Marcar v com a cor cinza
-        v.setCores("Cinza");//TODO: Verificar essa cor também.
         listaVisitados.add(v);
+        Item j = new Item(v.getItem());
+        j.setCores("gray"); 
+        this.listaExplorados.add(j);
+        
         
         //Colocar v no final de F
         Fila.add(v); //Quem tá na fila é a galera que tá esperando pra explorar
@@ -124,11 +130,18 @@ public class ControllerBusca {
                 //Se w não foi visitado:
                 if (!listaVisitados.contains(w)){
                                       
-                    ManipularPar(v.getID(), w.getID(), nivel);
+                    if (ManipularPar(v.getID(), w.getID(), nivel)){
+                        j = new Item(w.getItem());
+                        j.setCores("red,white"); 
+                        this.listaExplorados.add(j);
+                    }
                                         
                     //Marcar w com a cor cinza
-                    w.setCores("Cinza");
-                    listaVisitados.add(w);     
+                    
+                    listaVisitados.add(w);    
+                    j = new Item(w.getItem());
+                    j.setCores("gray"); 
+                    this.listaExplorados.add(j);
                     
                     //Colocar w no final de F
                     Fila.add(w);
@@ -136,7 +149,10 @@ public class ControllerBusca {
             }    
             
             //Marcar u com cor Preta
-            Fila.get(0).setCores("Preto");
+            j = new Item(Fila.get(0).getItem());
+            j.setCores("black"); 
+            this.listaExplorados.add(j);
+            
             
             //Se o primeiro da fila for o último vértice do nivel anterior 
             //é porque a fila estará prestes a removê-lo e mudar de nível
@@ -181,12 +197,15 @@ public class ControllerBusca {
                         v.setGeodesica(geodesica);
                         return true;
                     }
+                    else{
+                        return false;
+                    }
                 }
             }
             
         }
         listaParVertices.add(new ParVertice(Va, Vb, geodesica));
 
-        return false;//lançar exceção
+        return true;//lançar exceção
     }
 }
