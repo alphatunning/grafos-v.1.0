@@ -531,7 +531,7 @@ public class Principal extends etag.Controladora {
             //Então é grafo
             System.out.print("\nGRAFO:\n");
             System.out.print("Matriz de Adjacências:\n\n");
-
+            
             int numeroVertices = this.grafo.getMapaVertices().keySet().size();
             int matrizAdj[][] = new int[numeroVertices][numeroVertices];
             String valorVertice[] = new String[numeroVertices];
@@ -808,7 +808,7 @@ public class Principal extends etag.Controladora {
         int matriz[][] = null;
         int linha;
         int coluna;
-
+        
         for (Aresta item : listaAresta.values()) {
             linha = Integer.parseInt(item.getPartida().getID().substring(2, item.getPartida().getID().length()));
             coluna = Integer.parseInt(item.getDestino().getID().substring(2, item.getDestino().getID().length()));

@@ -139,28 +139,15 @@ public class ControllerBusca {
             //Marcar u com cor Preta
             Fila.get(0).setCores("Preto");
             
-            //Retirar u de F
-            Fila.remove(0); 
-            
-            //Fila, amiguinha, você mudou de nível?
-            //if (!Fila.contains(UltimoVertice)){
-            //    nivel++;
-            //    UltimoVerticeNivel = Fila.get((Fila.size()-1)).getID();
-            //}     
-            
-            boolean MudaNivel = true;
-            for (Vertice f: Fila){
-                if (f.getID().equals(UltimoVerticeNivel)){
-                    MudaNivel = false;
-                    break;
-                }
-            }
-
-            if (MudaNivel){
+            //Se o primeiro da fila for o último vértice do nivel anterior 
+            //é porque a fila estará prestes a removê-lo e mudar de nível
+            if (Fila.get(0).getID().equals(UltimoVerticeNivel)){
                 nivel++;
                 UltimoVerticeNivel = Fila.get((Fila.size()-1)).getID();
             }
             
+            //Retirar u de F
+            Fila.remove(0); 
             
         }
     }
