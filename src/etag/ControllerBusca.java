@@ -71,8 +71,7 @@ public class ControllerBusca {
                 //Marque v com cor branca
                 v.setCores("FFF"); //TODO: Verificar como colore nesse etag maluco do Môs.
             }
-
-
+            
             //Para Cada vértice v de G:
             for (Vertice v : G.getMapaVertices().values() ){
                                  
@@ -90,7 +89,6 @@ public class ControllerBusca {
                         
                     }
                     
-                //}
             }
         
     }
@@ -98,6 +96,7 @@ public class ControllerBusca {
     //procedimento Busca-Largura(v: vértice)
     public void BuscaLargura(Vertice v){ 
         int nivel = 0;
+        listaVisitados = new ArrayList<Vertice>();
         
         //Inicializar F
         List<Vertice> Fila = new LinkedList<Vertice>();
