@@ -346,6 +346,11 @@ public class Principal extends etag.Controladora {
 
         jMenuItem1.setText("Importar Dados");
         jMenuItem1.setActionCommand("ImportarDados");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportarDadosActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Média Geodésica");
@@ -658,16 +663,34 @@ public class Principal extends etag.Controladora {
     private void GeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GeodesicaActionPerformed
         // TODO add your handling code here:
         
-        Grafo GrafoCopia = this.grafo;        
+        Grafo MaiorComponente = this.grafo;        
        
-        GrafoCopia.atualizaArestas();
-        GrafoCopia.atualizaVertices();
+        MaiorComponente.atualizaArestas();
+        MaiorComponente.atualizaVertices();
         
         ControllerBusca B =  new ControllerBusca("L");
         
-        B.Busca(GrafoCopia);
-              
+        B.Busca(MaiorComponente);
+        
+        double fracaoGeodesica = 0;
+        int nGeodesica = MaiorComponente.getMapaVertices().keySet().size(); // MaiorComponente.getMapaVertices().size();
+        int somatorioGeodesica = 0;
+        double mediaGeodesica = 0;
+        
+        fracaoGeodesica = 1 / (0.5 * nGeodesica *(nGeodesica + 1));
+
+        for (ParVertice p: B.getListaParVertices()){
+            somatorioGeodesica += p.getGeodesica();
+        }
+        
+        mediaGeodesica = fracaoGeodesica * somatorioGeodesica; 
+                                
     }//GEN-LAST:event_GeodesicaActionPerformed
+
+    private void ImportarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarDadosActionPerformed
+         // Importar Dados
+        ModelArquivo.main();
+    }//GEN-LAST:event_ImportarDadosActionPerformed
 
     /**
      * Método principal para execução da janela gráfica da ferramenta.

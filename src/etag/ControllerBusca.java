@@ -15,7 +15,26 @@ import java.util.Map;
  * @author brusg
  */
 public class ControllerBusca {
+    
+    private ArrayList<Vertice> listaVisitados;
+    private ArrayList<ParVertice> listaParVertices;
+    private Grafo G;
+    private String tipoBusca;
+    
+     public ControllerBusca(String tipoBusca) {
+        listaVisitados = new ArrayList<Vertice>();
+        G = new Grafo();
+        this.tipoBusca = tipoBusca;
+    }
 
+    public ArrayList<ParVertice> getListaParVertices() {
+        return listaParVertices;
+    }
+
+    public void setListaParVertices(ArrayList<ParVertice> listaParVertices) {
+        this.listaParVertices = listaParVertices;
+    }
+ 
     public ArrayList<Vertice> getListaVisitados() {
         return listaVisitados;
     }
@@ -39,22 +58,12 @@ public class ControllerBusca {
     public void setTipoBusca(String tipoBusca) {
         this.tipoBusca = tipoBusca;
     }
-
-    private ArrayList<Vertice> listaVisitados;
-    private Grafo G;
-    private String tipoBusca;
-   
-    public ControllerBusca(String tipoBusca) {
-        listaVisitados = new ArrayList<Vertice>();
-        G = new Grafo();
-        this.tipoBusca = tipoBusca;
-    }
-    
+      
     //procedimento Busca(G: Grafo)
     public void Busca(Grafo G){
-        try
-        {
+ 
             listaVisitados = new ArrayList<Vertice>();
+            listaParVertices = new ArrayList<ParVertice>();
             this.G = G;
 
             //Para Cada vértice v de G:
@@ -66,61 +75,58 @@ public class ControllerBusca {
 
             //Para Cada vértice v de G:
             for (Vertice v : G.getMapaVertices().values() ){
-                //Se v não foi visitado:
-                if(!listaVisitados.contains(v)){
-                    
+                                 
                     //parâmetro para indicar o tipo da busca
                     if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){
-                    
-                        BuscaProfundidade(v);
-                        
+                        //Se v não foi visitado:
+                        if(!listaVisitados.contains(v)){
+                           BuscaProfundidade(v); 
+                           
+                           //adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
+                        }
+                                                
                     }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
-                        
                         BuscaLargura(v); 
-                        
-                    }else{
-                    
-                        throw new Exception("Tipo de busca mal definido amiguinho!");
                         
                     }
                     
-                }
-        }
-        }
-        catch (Exception e){
-            e.getMessage(); //dar Print nesse cara aqui
-        }
-            
+                //}
+            }
+        
     }
     
     //procedimento Busca-Largura(v: vértice)
     public void BuscaLargura(Vertice v){ 
+        int nivel = 0;
         
         //Inicializar F
         List<Vertice> Fila = new LinkedList<Vertice>();
+        String UltimoVerticeNivel;
         
         //Marcar v com a cor cinza
         v.setCores("Cinza");//TODO: Verificar essa cor também.
         listaVisitados.add(v);
         
-        //DÚVIDA: Para um vertice ir pra lsita de visitados, basta ficar cinza? ou Preto?
-
         //Colocar v no final de F
         Fila.add(v); //Quem tá na fila é a galera que tá esperando pra explorar
         //todos os seus vértices adjacentes.
+        UltimoVerticeNivel = v.getID();
         
+        nivel = 1;
         //Enquanto F não vazio:
-        while (Fila.isEmpty()){
+        while (!Fila.isEmpty()){
             
             //u = primeiro elemento de F
-            Vertice u = new Vertice(Fila.get(0)); 
-                                   
+            String u = Fila.get(0).getID(); 
+            
             //Para cada vértice w adjacente a u:
-            for (Vertice w : G.getVerticesAdjacentes(u.getID())){
+            for (Vertice w : G.getVerticesAdjacentes(u)){
                 
                 //Se w não foi visitado:
                 if (!listaVisitados.contains(w)){
-                    
+                                      
+                    ManipularPar(v.getID(), w.getID(), nivel);
+                                        
                     //Marcar w com a cor cinza
                     w.setCores("Cinza");
                     listaVisitados.add(w);     
@@ -130,11 +136,32 @@ public class ControllerBusca {
                 }
             }    
             
-            //Retirar u de F
-            Fila.remove(u); //ou Fila.remove(0); 
-   
             //Marcar u com cor Preta
-            u.setCores("Heriklys");
+            Fila.get(0).setCores("Preto");
+            
+            //Retirar u de F
+            Fila.remove(0); 
+            
+            //Fila, amiguinha, você mudou de nível?
+            //if (!Fila.contains(UltimoVertice)){
+            //    nivel++;
+            //    UltimoVerticeNivel = Fila.get((Fila.size()-1)).getID();
+            //}     
+            
+            boolean MudaNivel = true;
+            for (Vertice f: Fila){
+                if (f.getID().equals(UltimoVerticeNivel)){
+                    MudaNivel = false;
+                    break;
+                }
+            }
+
+            if (MudaNivel){
+                nivel++;
+                UltimoVerticeNivel = Fila.get((Fila.size()-1)).getID();
+            }
+            
+            
         }
     }
     
@@ -154,4 +181,26 @@ public class ControllerBusca {
         
     }
     
+    
+    public boolean ManipularPar(String Va, String Vb, int geodesica){
+        
+        if (!this.listaParVertices.isEmpty()){
+            
+            for (ParVertice v: this.listaParVertices){
+
+                //se aquele vertice existir 
+                if ((v.getVa().equals(Va) && v.getVb().equals(Vb)) 
+                    || (v.getVa().equals(Vb) && v.getVb().equals(Va))){
+                    if (geodesica < v.getGeodesica()){
+                        v.setGeodesica(geodesica);
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        listaParVertices.add(new ParVertice(Va, Vb, geodesica));
+
+        return false;//lançar exceção
+    }
 }
