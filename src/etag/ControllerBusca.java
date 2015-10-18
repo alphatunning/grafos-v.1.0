@@ -8,7 +8,6 @@ package etag;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -80,14 +79,13 @@ public class ControllerBusca {
             }
             
                 //parâmetro para indicar o tipo da busca
-                if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){
-                    //Se v não foi visitado:
-                    //if(!listaVisitados.contains(v)){
-                    //   BuscaProfundidade(v); 
+                if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){    
+                    
+                    if(!listaVisitados.contains(v)){
+                       BuscaProfundidade(v); 
 
-                       //adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
-                    //}
-
+//                       adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
+                    }
                 }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
                     BuscaLargura(v); 
 
@@ -101,10 +99,10 @@ public class ControllerBusca {
     public void BuscaLargura(Vertice v){ 
         //Inicializar F
         List<Vertice> Fila = new LinkedList<Vertice>();
+        listaVisitados = new ArrayList<Vertice>();
         String UltimoVerticeNivel;
         int nivel = 0;
-        listaVisitados = new ArrayList<Vertice>();
-                
+        
         //Marcar v com a cor cinza
         listaVisitados.add(v);
         Item j = new Item(v.getItem());
@@ -171,16 +169,20 @@ public class ControllerBusca {
     public void BuscaProfundidade(Vertice v){
         
         //Marque v com cor cinza
-        v.setCores("cinza");
+        Item vertice = new Item(v.getItem());
+        vertice.setCores("black,gray");
+        this.listaExplorados.add(vertice); 
+        this.listaVisitados.add(v);
         
         for (Vertice w : G.getVerticesAdjacentes(v.getID())){
             if (!listaVisitados.contains(w)){
                 BuscaProfundidade(w);
             }
         }
-        
-        v.setCores("preto");
-        
+             
+        vertice = new Item(v.getItem());
+        vertice.setCores("black");
+        this.listaExplorados.add(vertice); 
     }
     
     

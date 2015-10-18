@@ -86,9 +86,9 @@ public class Principal extends etag.Controladora {
         MatrizAdj = new javax.swing.JMenuItem();
         MatrizIncidente = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        ImportarDados = new javax.swing.JMenuItem();
+        MaiorComponente = new javax.swing.JMenuItem();
+        MediaGeodesica = new javax.swing.JMenuItem();
 
         jToolBar2.setRollover(true);
 
@@ -344,27 +344,32 @@ public class Principal extends etag.Controladora {
         jMenu1.setText("Trabalho Prático II");
         jMenu1.setToolTipText("");
 
-        jMenuItem1.setText("Importar Dados");
-        jMenuItem1.setActionCommand("ImportarDados");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        ImportarDados.setText("Importar Dados");
+        ImportarDados.setActionCommand("ImportarDados");
+        ImportarDados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ImportarDadosActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(ImportarDados);
 
-        jMenuItem2.setText("Média Geodésica");
-        jMenuItem2.setActionCommand("Geodesica");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        MaiorComponente.setText("Maior Componente");
+        MaiorComponente.setActionCommand("MaiorComponente");
+        MaiorComponente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GeodesicaActionPerformed(evt);
+                MaiorComponenteActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(MaiorComponente);
 
-        jMenuItem3.setText("Maior Componente");
-        jMenuItem3.setActionCommand("MaiorComponente");
-        jMenu1.add(jMenuItem3);
+        MediaGeodesica.setText("Média Geodésica");
+        MediaGeodesica.setActionCommand("MediaGeodesica");
+        MediaGeodesica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MediaGeodesicaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MediaGeodesica);
 
         MenuToolbar.add(jMenu1);
 
@@ -660,7 +665,7 @@ public class Principal extends etag.Controladora {
         }
     }//GEN-LAST:event_MatrizIncidenteActionPerformed
 
-    private void GeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GeodesicaActionPerformed
+    private void MediaGeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediaGeodesicaActionPerformed
         // TODO add your handling code here:
         
         this.grafo.atualizaArestas();
@@ -691,7 +696,7 @@ public class Principal extends etag.Controladora {
                          
         //jLabelStatus.setText("Média Geodésica: " + Double.toString(mediaGeodesica));
         
-    }//GEN-LAST:event_GeodesicaActionPerformed
+    }//GEN-LAST:event_MediaGeodesicaActionPerformed
 
     private void ImportarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarDadosActionPerformed
          // Importar Dados
@@ -703,6 +708,20 @@ public class Principal extends etag.Controladora {
         }
         
     }//GEN-LAST:event_ImportarDadosActionPerformed
+
+    private void MaiorComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaiorComponenteActionPerformed
+         
+        this.grafo.atualizaArestas();
+        this.grafo.atualizaVertices();
+        
+        Grafo MaiorComponente = this.grafo;             
+                
+        ControllerBusca B =  new ControllerBusca("P");
+        
+        B.Busca(MaiorComponente);
+        
+        this.explorados.addAll((B.listaExplorados));
+    }//GEN-LAST:event_MaiorComponenteActionPerformed
 
     /**
      * Método principal para execução da janela gráfica da ferramenta.
@@ -732,8 +751,11 @@ public class Principal extends etag.Controladora {
     private javax.swing.JMenuItem ETag;
     private javax.swing.JMenuItem Euleriano;
     private javax.swing.JMenuItem Hierholzer;
+    private javax.swing.JMenuItem ImportarDados;
+    private javax.swing.JMenuItem MaiorComponente;
     private javax.swing.JMenuItem MatrizAdj;
     private javax.swing.JMenuItem MatrizIncidente;
+    private javax.swing.JMenuItem MediaGeodesica;
     private javax.swing.JMenu MenuAlgoritmos;
     private javax.swing.JMenu MenuAnimacoes;
     private javax.swing.JMenu MenuSobre;
@@ -750,9 +772,6 @@ public class Principal extends etag.Controladora {
     private javax.swing.JMenuItem Unicursal;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JScrollPane jScrollPane1;
