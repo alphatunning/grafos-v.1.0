@@ -1,23 +1,23 @@
-- algoritmo busca profundidade
+* algoritmo busca profundidade
 
-- calcular a qtde de arestas/vertices por arvore
+* calcular a qtde de arestas/vertices por arvore
 
-- criar uma lista de arvores
+* criar uma lista de arvores
 
-- verificar nessa lista quem é a maior árvore e enviar pra busca em largura
+* verificar nessa lista quem Ã© a maior Ã¡rvore e enviar pra busca em largura
 
-- ajeitar os menus pra duas partes agora: Maior componente e depois, Médiga Geodésica
+* ajeitar os menus pra duas partes agora: Maior componente e depois, MÃ©diga GeodÃ©sica
 
 * algoritmo busca largura
 
-* implementar a geodesica pra cads vértice chamando a busca
+* implementar a geodesica pra cads vÃ©rtice chamando a busca
 
-* implementar a media geodesica (todos os vértices) com um for bolado chamando o item anterior
+* implementar a media geodesica (todos os vÃ©rtices) com um for bolado chamando o item anterior
 
 - Arrumar um jeito de copiar o grafo (clone) na hora de montar o maior componente.
 
-- testar a manipulação do facebook no uso da geodesica
+- testar a manipulaÃ§Ã£o do facebook no uso da geodesica
 
 - testar alterar/remover/adicionar itens no grafo.
 
-- DÚVIDA: Considerar a volta do par de vértice no somatório das geodésica.
+- DÃšVIDA: Considerar a volta do par de vÃ©rtice no somatÃ³rio das geodÃ©sica.
