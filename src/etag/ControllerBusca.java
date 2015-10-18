@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author brusg
+ * @author brusg/bruno
  */
 public class ControllerBusca {
     
@@ -20,6 +20,12 @@ public class ControllerBusca {
     private Grafo G;
     private String tipoBusca;
     public ArrayList<Item> listaExplorados;
+    public TagGrafo grafo;
+    public ArrayList <TagGrafo> listaGrafo;
+    public ArrayList <Vertice> listaVertices;
+    public ArrayList <Aresta> listaAresta;
+    
+    
     
      public ControllerBusca(String tipoBusca) {
         listaVisitados = new ArrayList<Vertice>();
@@ -65,26 +71,34 @@ public class ControllerBusca {
  
         listaVisitados = new ArrayList<Vertice>();
         listaParVertices = new ArrayList<ParVertice>();
+        listaVertices = new ArrayList<Vertice>();
+        listaAresta = new ArrayList<Aresta>();
+        listaGrafo = new ArrayList<TagGrafo>();
+        
         this.G = G;
 
-        
-            
-        //Para Cada vértice v de G:
-        for (Vertice v : G.getMapaVertices().values() ){
-
-            for (Vertice x : G.getMapaVertices().values() ){
+        //Primeiro seta todos os nodos para branco em ambas as buscas
+        for (Vertice x : G.getMapaVertices().values() ){
                 Item j = new Item(x.getItem());
                 j.setCores("black,white");
                 this.listaExplorados.add(j);  
             }
-            
+        
+        //Para Cada vértice v de G:
+        for (Vertice v : G.getMapaVertices().values() ){           
                 //parâmetro para indicar o tipo da busca
                 if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){    
                     
                     if(!listaVisitados.contains(v)){
-                       BuscaProfundidade(v); 
-
-//                       adicionar à lista de Arvores. Pra depois lá fora descobrir qual das arvores é o maior componente
+                       //Sempre o primeiro vertice a entrar nesta condição do loop é o primeiro vertice do subgrafo atual.
+                       listaVertices.add(v);
+                       
+                       BuscaProfundidade(v);
+                       
+                       //A ideia deste método é construi um grafo para cada subgrafo dentro area de vizualização do etag.
+                       //Pega o primeiro vestice adiciona na lista ..quando entra na busca é preenchido o resto ,quando 
+                       //termina a busca tenho o subgrafo atual preenchido.
+                       listaGrafo.add(salvaSubGrafo(listaVertices , listaAresta));                                   
                     }
                 }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
                     BuscaLargura(v); 
@@ -93,6 +107,12 @@ public class ControllerBusca {
 
         }
 
+    }
+    
+    public TagGrafo salvaSubGrafo (ArrayList<Vertice> listaVertice, ArrayList<Aresta> listaAresta){
+        
+      return  this.grafo = new TagGrafo(listaVertice,listaAresta);
+    
     }
     
     //procedimento Busca-Largura(v: vértice)
