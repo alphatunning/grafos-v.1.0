@@ -20,6 +20,10 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class Principal extends etag.Controladora {
 
+    protected ControllerBusca Profundidade;
+    protected ControllerBusca Largura;
+    protected Grafo MaiorArvore;
+    
     /**
      * Método construtor da tela principal da ferramenta e-TAG.
      *
@@ -86,7 +90,6 @@ public class Principal extends etag.Controladora {
         MatrizAdj = new javax.swing.JMenuItem();
         MatrizIncidente = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        ImportarDados = new javax.swing.JMenuItem();
         MaiorComponente = new javax.swing.JMenuItem();
         MediaGeodesica = new javax.swing.JMenuItem();
 
@@ -343,15 +346,6 @@ public class Principal extends etag.Controladora {
 
         jMenu1.setText("Trabalho Prático II");
         jMenu1.setToolTipText("");
-
-        ImportarDados.setText("Importar Dados");
-        ImportarDados.setActionCommand("ImportarDados");
-        ImportarDados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ImportarDadosActionPerformed(evt);
-            }
-        });
-        jMenu1.add(ImportarDados);
 
         MaiorComponente.setText("Maior Componente");
         MaiorComponente.setActionCommand("MaiorComponente");
@@ -668,59 +662,82 @@ public class Principal extends etag.Controladora {
     private void MediaGeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediaGeodesicaActionPerformed
         // TODO add your handling code here:
         
+        final long inicio = System.currentTimeMillis();
+        
         this.grafo.atualizaArestas();
         this.grafo.atualizaVertices();
         
-        Grafo MaiorComponente = this.grafo;             
-                
-        ControllerBusca B =  new ControllerBusca("L");
+        ControllerBusca Largura = new ControllerBusca("L");
         
-        B.Busca(MaiorComponente);
+        Largura.Busca(MaiorArvore);
         
-        this.explorados.addAll((B.listaExplorados));
+        //Largura.Busca(this.grafo);
+        
+        this.explorados.clear();
+        
+        this.explorados.addAll(Largura.listaExplorados);
         
         double fracaoGeodesica = 0;
-        int nGeodesica = MaiorComponente.getMapaVertices().keySet().size(); // MaiorComponente.getMapaVertices().size();
+        int nGeodesica = Largura.getG().getMapaVertices().keySet().size(); // MaiorComponente.getMapaVertices().size();
         int somatorioGeodesica = 0;
         double mediaGeodesica = 0;
         
         fracaoGeodesica = 1 / (0.5 * nGeodesica *(nGeodesica + 1));
 
-        for (ParVertice p: B.getListaParVertices()){
+        for (ParVertice p: Largura.getListaParVertices()){
             somatorioGeodesica += p.getGeodesica();
         }
         
         mediaGeodesica = fracaoGeodesica * somatorioGeodesica; 
         
-         JPrompt.printPane("Média Geodésica: " + Double.toString(mediaGeodesica));
-                         
-        //jLabelStatus.setText("Média Geodésica: " + Double.toString(mediaGeodesica));
+        final long fim = System.currentTimeMillis();
+        
+        final long TempoMilli = (fim - inicio);
+        
+        long second = (TempoMilli / 1000) % 60;
+        long minute = (TempoMilli / (1000 * 60)) % 60;
+        long hour = (TempoMilli / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d:%03d", hour, minute, second, TempoMilli);
+                
+        JPrompt.printPane("Média Geodésica: " + Double.toString(mediaGeodesica) + "\nTempo de Execução: " + time);
         
     }//GEN-LAST:event_MediaGeodesicaActionPerformed
-
-    private void ImportarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarDadosActionPerformed
-         // Importar Dados
-        //ModelArquivo.main();
-        
-        for (Vertice v : this.grafo.getVerticesAdjacentes("v1")){
-            v.setCores("black,green");
-            this.explorados.add(v);
-        }
-        
-    }//GEN-LAST:event_ImportarDadosActionPerformed
 
     private void MaiorComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaiorComponenteActionPerformed
          
         this.grafo.atualizaArestas();
         this.grafo.atualizaVertices();
+
+        Grafo grafo = this.grafo;             
+
+        Profundidade =  new ControllerBusca("P");
+
+        Profundidade.Busca(grafo);
+
+        MaiorArvore = new Grafo();
+
+        MaiorArvore = Profundidade.MaiorComponente();
+
+        this.explorados.addAll((Profundidade.listaExplorados));
+
+        JPrompt.printPane("Maior Componente\nQtde Vertices: " + MaiorArvore.getMapaVertices().size());// +
+                //"\nQtde Arestas: " + MaiorArvore.getArestasGraficas().size());
+
+        ArrayList<Item> Teste =  new ArrayList<Item>();
+       
+        for (Vertice v : MaiorArvore.getMapaVertices().values()){
+
+            Item j = new Item(v.getItem());
+            j.setCores("red,green");
+            Teste.add(j);
+
+        }
         
-        Grafo MaiorComponente = this.grafo;             
-                
-        ControllerBusca B =  new ControllerBusca("P");
+        this.explorados.addAll(Teste);
         
-        B.Busca(MaiorComponente);
-        
-        this.explorados.addAll((B.listaExplorados));
+          
+        //this.MaiorComponente = B.
     }//GEN-LAST:event_MaiorComponenteActionPerformed
 
     /**
@@ -751,7 +768,6 @@ public class Principal extends etag.Controladora {
     private javax.swing.JMenuItem ETag;
     private javax.swing.JMenuItem Euleriano;
     private javax.swing.JMenuItem Hierholzer;
-    private javax.swing.JMenuItem ImportarDados;
     private javax.swing.JMenuItem MaiorComponente;
     private javax.swing.JMenuItem MatrizAdj;
     private javax.swing.JMenuItem MatrizIncidente;

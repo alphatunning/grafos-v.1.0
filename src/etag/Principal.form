@@ -169,15 +169,6 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="ImportarDados">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Importar Dados"/>
-                <Property name="actionCommand" type="java.lang.String" value="ImportarDados"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ImportarDadosActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="MaiorComponente">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Maior Componente"/>
