@@ -33,17 +33,6 @@ public class Principal extends etag.Controladora {
         this.jPanel1.add(this.grafoComponente, 0);
         this.setContentPane(this.jPanelFundo);
         this.ChkGrafoDirecionado.setSelected(this.grafo.getDirecionado());
-        /*
-         List<TagVertice> listaVertice = new ArrayList<TagVertice>();
-         List<TagAresta> listaAresta = new ArrayList<TagAresta>();
-
-         for (Vertice vertice : this.grafo.getMapaVertices().values()) {
-         listaVertice.add(new TagVertice(vertice));
-         }
-
-         for (Aresta aresta : this.grafo.getArestasGraficas().values()) {
-         listaAresta.add(new TagAresta(aresta));
-         }*/
     }
 
     @SuppressWarnings("unchecked")
@@ -660,7 +649,6 @@ public class Principal extends etag.Controladora {
     }//GEN-LAST:event_MatrizIncidenteActionPerformed
 
     private void MediaGeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediaGeodesicaActionPerformed
-        // TODO add your handling code here:
         
         final long inicio = System.currentTimeMillis();
         
@@ -711,15 +699,17 @@ public class Principal extends etag.Controladora {
 
         Grafo grafo = this.grafo;             
 
-        Profundidade =  new ControllerBusca("P");
+        this.Profundidade =  new ControllerBusca("P");
 
-        Profundidade.Busca(grafo);
+        this.Profundidade.Busca(grafo);
 
-        MaiorArvore = new Grafo();
+        this.MaiorArvore = new Grafo();
 
-        MaiorArvore = Profundidade.MaiorComponente();
+        this.MaiorArvore = this.Profundidade.MaiorComponente();
 
         this.explorados.addAll((Profundidade.listaExplorados));
+        
+        //String saida = String.format("Maior componente\nQtde vértices: {0}\nQtde arestas: {1}", this.MaiorArvore.getMapaVertices().size(), this.MaiorArvore.getArestasGraficas().size());
 
         JPrompt.printPane("Maior Componente\nQtde Vertices: " + MaiorArvore.getMapaVertices().size());// +
                 //"\nQtde Arestas: " + MaiorArvore.getArestasGraficas().size());
@@ -735,8 +725,6 @@ public class Principal extends etag.Controladora {
         }
         
         this.explorados.addAll(Teste);
-        
-          
         //this.MaiorComponente = B.
     }//GEN-LAST:event_MaiorComponenteActionPerformed
 
