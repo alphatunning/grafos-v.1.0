@@ -20,7 +20,7 @@ public class ControllerBusca {
     private Grafo G;
     private String tipoBusca;
     public ArrayList<Item> listaExplorados;
-    public ArrayList <Grafo> Floresta;
+    public ArrayList <TagGrafo> Floresta;
     public ArrayList <Vertice> listaVertices;
     public ArrayList <Aresta> listaAresta;
     
@@ -29,6 +29,11 @@ public class ControllerBusca {
         G = new Grafo();
         this.tipoBusca = tipoBusca;
         listaExplorados = new ArrayList<Item>();
+        
+        listaParVertices = new ArrayList<ParVertice>();
+        listaVertices = new ArrayList<Vertice>();
+        listaAresta = new ArrayList<Aresta>();
+        Floresta = new ArrayList<TagGrafo>();
     }
 
     public ArrayList<ParVertice> getListaParVertices() {
@@ -64,16 +69,11 @@ public class ControllerBusca {
     }
       
     //procedimento Busca(G: Grafo)
-    public void Busca(Grafo MeuOvo){
+    public void Busca(Grafo Grafo){
  
+        this.G = Grafo;
         
-        this.G = MeuOvo;
         
-        listaVisitados = new ArrayList<Vertice>();
-        listaParVertices = new ArrayList<ParVertice>();
-        listaVertices = new ArrayList<Vertice>();
-        listaAresta = new ArrayList<Aresta>();
-        Floresta = new ArrayList<Grafo>();
 
         //Primeiro seta todos os nodos para branco em ambas as buscas
         if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){
@@ -83,28 +83,34 @@ public class ControllerBusca {
                     this.listaExplorados.add(j);  
                 }
         }
-        
+        if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){   
         //Para Cada vértice v de G:
-        for (Vertice v : G.getMapaVertices().values() ){           
+            
+            for (Vertice v : G.getMapaVertices().values() ){           
                 //parâmetro para indicar o tipo da busca
-                if (!tipoBusca.isEmpty() && tipoBusca.equals("P")){    
+                
                     
-                    if(!listaVisitados.contains(v)){
-                       //Sempre o primeiro vertice a entrar nesta condição do loop é o primeiro vertice do subgrafo atual.
-                       
-                       this.listaVertices = new ArrayList<Vertice>();
-                       this.listaAresta = new ArrayList<Aresta>();
-                       
-                       BuscaProfundidade(v);
-                       
-                       //A ideia deste método é construi um grafo para cada subgrafo dentro area de vizualização do etag.
-                       //Pega o primeiro vestice adiciona na lista ..quando entra na busca é preenchido o resto ,quando 
-                       //termina a busca tenho o subgrafo atual preenchido.
-                       Floresta.add(salvaSubGrafo(listaVertices , listaAresta));                                   
-                    }
-                }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
-                    
-                    for (Vertice x : MeuOvo.getMapaVertices().values() ){
+                if(!listaVisitados.contains(v)){
+                   //Sempre o primeiro vertice a entrar nesta condição do loop é o primeiro vertice do subgrafo atual.
+
+                   this.listaVertices = new ArrayList<Vertice>();
+                   this.listaAresta = new ArrayList<Aresta>();
+
+                   BuscaProfundidade(v);
+                   
+
+                   //A ideia deste método é construi um grafo para cada subgrafo dentro area de vizualização do etag.
+                   //Pega o primeiro vestice adiciona na lista ..quando entra na busca é preenchido o resto ,quando 
+                   //termina a busca tenho o subgrafo atual preenchido.
+                   Floresta.add(salvaSubGrafo(listaVertices , listaAresta));                                   
+                }
+                
+            }
+        }else if (!tipoBusca.isEmpty() && tipoBusca.equals("L")){
+            
+            for (Vertice v : listaVertices ){  
+                
+                for (Vertice x : listaVertices ){
                         Item j = new Item(x.getItem());
                         j.setCores("black,white");
                         this.listaExplorados.add(j);  
@@ -118,27 +124,30 @@ public class ControllerBusca {
 
     }
     
-    public Grafo salvaSubGrafo (ArrayList<Vertice> listaVertice, ArrayList<Aresta> listaAresta){
+    public TagGrafo salvaSubGrafo (ArrayList<Vertice> alistaVertice, ArrayList<Aresta> alistaAresta){
         
-        Grafo Arvore = new Grafo();
+        //Grafo Arvore = new Grafo();
+        TagGrafo Arvore = new TagGrafo();
+        Arvore.Vertices = alistaVertice;
+        Arvore.Arestas = alistaAresta;
         
-        Arvore.createGraph();
+        //Arvore.createGraph();
         //Arvore.drawGraph();
          
-        for (Vertice v: listaVertice){
+        //for (Vertice v: listaVertice){
             
-            Double x = v.getItem().getGeometry().getCenterX();
-            Double y = v.getItem().getGeometry().getCenterY();
+        //    Double x = v.getItem().getGeometry().getCenterX();
+        //    Double y = v.getItem().getGeometry().getCenterY();
             
-            Arvore.addVerticeGrafico(v.getID(), v.getValor(), x.intValue() , y.intValue());
-        }
+        //    Arvore.addVerticeGrafico(v.getID(), v.getValor(), x.intValue() , y.intValue());
+        //}
         
         //TODO: Tirar a duvida a respeito da inciialização desse grafo. Se é de fato com listavertice + lsitaaresta. Senão temq  controlar por algum esquema de Hash ou do tipo drawGraph. O que q tem q fazer pra add uma aresta.
-        for (Aresta a: listaAresta){
+        //for (Aresta a: listaAresta){
             //Arvore.addArestaGrafica(a.getPartida().getID(), a.getDestino().getID(), a.getValor());
             //Arvore.
-            Arvore.addArestaMapeada(a.getID(), a);  
-        }
+        //    Arvore.addArestaMapeada(a.getID(), a);  
+        //}
         
         //Arvore.getVerticesAdjacentes("v1");
         
@@ -271,21 +280,22 @@ public class ControllerBusca {
         return true;//lançar exceção
     }
     
-    public Grafo MaiorComponente(){
+    public TagGrafo MaiorComponente(){
         
-        Grafo maiorComponente = new Grafo();
+        //Grafo maiorComponente = new Grafo();
+            
+        //maiorComponente.createGraph();
         
-        maiorComponente.createGraph();
-        
+        TagGrafo maiorComponente = new TagGrafo();
+            
         int qtdeVertices = 0;
         int qtdeArestas = 0;
         
-        for (Grafo arvore: Floresta){
-            //if ((arvore.getMapaVertices().size() + arvore.getArestasGraficas().size()) > (qtdeVertices + qtdeArestas) ){
-            if (arvore.getMapaVertices().size() > qtdeVertices){
+        for (TagGrafo arvore: Floresta){
+            if ((arvore.Vertices.size() + arvore.Arestas.size()) > (qtdeVertices + qtdeArestas) ){
                 maiorComponente = arvore;
-                qtdeVertices = arvore.getMapaVertices().size();
-                //qtdeArestas = maiorComponente.getArestasGraficas().size();
+                qtdeVertices = arvore.Vertices.size();
+                qtdeArestas = arvore.Arestas.size();
             }
         }
         

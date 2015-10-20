@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -22,7 +24,7 @@ public class Principal extends etag.Controladora {
 
     protected ControllerBusca Profundidade;
     protected ControllerBusca Largura;
-    protected Grafo MaiorArvore;
+    protected TagGrafo MaiorArvore;
     
     /**
      * Método construtor da tela principal da ferramenta e-TAG.
@@ -33,6 +35,17 @@ public class Principal extends etag.Controladora {
         this.jPanel1.add(this.grafoComponente, 0);
         this.setContentPane(this.jPanelFundo);
         this.ChkGrafoDirecionado.setSelected(this.grafo.getDirecionado());
+        /*
+         List<TagVertice> listaVertice = new ArrayList<TagVertice>();
+         List<TagAresta> listaAresta = new ArrayList<TagAresta>();
+
+         for (Vertice vertice : this.grafo.getMapaVertices().values()) {
+         listaVertice.add(new TagVertice(vertice));
+         }
+
+         for (Aresta aresta : this.grafo.getArestasGraficas().values()) {
+         listaAresta.add(new TagAresta(aresta));
+         }*/
     }
 
     @SuppressWarnings("unchecked")
@@ -81,6 +94,7 @@ public class Principal extends etag.Controladora {
         jMenu1 = new javax.swing.JMenu();
         MaiorComponente = new javax.swing.JMenuItem();
         MediaGeodesica = new javax.swing.JMenuItem();
+        jMenuItemNextTimer = new javax.swing.JMenuItem();
 
         jToolBar2.setRollover(true);
 
@@ -353,6 +367,14 @@ public class Principal extends etag.Controladora {
             }
         });
         jMenu1.add(MediaGeodesica);
+
+        jMenuItemNextTimer.setText("NexTimer");
+        jMenuItemNextTimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNextTimerActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemNextTimer);
 
         MenuToolbar.add(jMenu1);
 
@@ -649,7 +671,13 @@ public class Principal extends etag.Controladora {
     }//GEN-LAST:event_MatrizIncidenteActionPerformed
 
     private void MediaGeodesicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediaGeodesicaActionPerformed
+        // TODO add your handling code here:
         
+        if (MaiorArvore == null){
+            JPrompt.printPane("Amiguinho, só trabalho com árvores! Floresta não! Processe o maior componente, por favorzinho");
+            return;
+        }
+       
         final long inicio = System.currentTimeMillis();
         
         this.grafo.atualizaArestas();
@@ -657,16 +685,17 @@ public class Principal extends etag.Controladora {
         
         ControllerBusca Largura = new ControllerBusca("L");
         
-        Largura.Busca(MaiorArvore);
+        Largura.listaVertices = MaiorArvore.Vertices;
+        Largura.listaAresta = MaiorArvore.Arestas;
         
-        //Largura.Busca(this.grafo);
+        //Largura.Busca(MaiorArvore);
         
-        this.explorados.clear();
-        
+        Largura.Busca(this.grafo);
+                
         this.explorados.addAll(Largura.listaExplorados);
         
         double fracaoGeodesica = 0;
-        int nGeodesica = Largura.getG().getMapaVertices().keySet().size(); // MaiorComponente.getMapaVertices().size();
+        int nGeodesica = MaiorArvore.Vertices.size(); // MaiorComponente.getMapaVertices().size();
         int somatorioGeodesica = 0;
         double mediaGeodesica = 0;
         
@@ -694,29 +723,28 @@ public class Principal extends etag.Controladora {
 
     private void MaiorComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaiorComponenteActionPerformed
          
+        this.explorados.clear();
+        
+        final long inicio = System.currentTimeMillis();
+        
         this.grafo.atualizaArestas();
         this.grafo.atualizaVertices();
 
         Grafo grafo = this.grafo;             
 
-        this.Profundidade =  new ControllerBusca("P");
+        Profundidade =  new ControllerBusca("P");
 
-        this.Profundidade.Busca(grafo);
+        Profundidade.Busca(grafo);
 
-        this.MaiorArvore = new Grafo();
+        MaiorArvore = new TagGrafo();
 
-        this.MaiorArvore = this.Profundidade.MaiorComponente();
-
+        MaiorArvore = Profundidade.MaiorComponente();
+        
         this.explorados.addAll((Profundidade.listaExplorados));
         
-        //String saida = String.format("Maior componente\nQtde vértices: {0}\nQtde arestas: {1}", this.MaiorArvore.getMapaVertices().size(), this.MaiorArvore.getArestasGraficas().size());
-
-        JPrompt.printPane("Maior Componente\nQtde Vertices: " + MaiorArvore.getMapaVertices().size());// +
-                //"\nQtde Arestas: " + MaiorArvore.getArestasGraficas().size());
-
         ArrayList<Item> Teste =  new ArrayList<Item>();
        
-        for (Vertice v : MaiorArvore.getMapaVertices().values()){
+        for (Vertice v : MaiorArvore.Vertices){
 
             Item j = new Item(v.getItem());
             j.setCores("red,green");
@@ -725,8 +753,59 @@ public class Principal extends etag.Controladora {
         }
         
         this.explorados.addAll(Teste);
+        
+        
+
+        
+        final long fim = System.currentTimeMillis();
+        
+        final long TempoMilli = (fim - inicio);
+        
+        long second = (TempoMilli / 1000) % 60;
+        long minute = (TempoMilli / (1000 * 60)) % 60;
+        long hour = (TempoMilli / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d:%03d", hour, minute, second, TempoMilli);
+        
+
+        JPrompt.printPane("Maior Componente\nQtde Vertices: " + MaiorArvore.Vertices.size() +
+                "\nQtde Arestas: " + MaiorArvore.Arestas.size() + "\nTempo de Execução: " + time);
+
+        
+          
         //this.MaiorComponente = B.
     }//GEN-LAST:event_MaiorComponenteActionPerformed
+
+    private void jMenuItemNextTimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNextTimerActionPerformed
+        // TODO add your handling code here:
+        
+        int delay = 1000;   // delay de 1 seg.
+        int interval = 250;  // intervalo de 0,250 seg.
+        final Timer timer = new Timer();
+               
+        final java.awt.event.ActionEvent ovo ;
+                ovo = evt;
+        if (explorados.size() == 0){
+            timer.cancel();
+            JPrompt.printPane("Processe algo primeiro, amiguinho!");
+                    return;
+        }
+        
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                ProximoActionPerformed(ovo);
+                if (explorados.size() == 0){
+                    
+                    timer.cancel(); 
+                    
+                    JPrompt.printPane("Fim do processamento amiguinho! Parabéns pelo empenho. Que Gaia te conceda boas notas!");
+                    
+                    return;
+                }
+            }
+        }, delay, interval);
+        
+    }//GEN-LAST:event_jMenuItemNextTimerActionPerformed
 
     /**
      * Método principal para execução da janela gráfica da ferramenta.
@@ -776,6 +855,7 @@ public class Principal extends etag.Controladora {
     private javax.swing.JMenuItem Unicursal;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItemNextTimer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JScrollPane jScrollPane1;

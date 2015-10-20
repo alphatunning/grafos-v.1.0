@@ -23,6 +23,16 @@ public class TagGrafo {
     private int MatrizAdjacenciaDigrafo[][];
     private int MatrizIncidenciaGrafo[][];
     private int MatrizIncidenciaDigrafo[][];
+    
+    public ArrayList<Vertice> Vertices;
+    public ArrayList<Aresta> Arestas;
+    
+    public TagGrafo(){
+        Vertices = new ArrayList<Vertice>();
+        Arestas = new ArrayList<Aresta>();
+    }
+    
+    
 
     public TagGrafo(List<Vertice> aListaVertices, List<Aresta> aListaArestas) {
         this.ListaArestas = new ArrayList<TagAresta>();
